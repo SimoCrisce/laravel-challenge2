@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
+use App\Models\Activity;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 
@@ -11,9 +15,23 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function prenota($id)
     {
-        $courses = Course::with('activity', 'slot')->get();
+        Auth::user()->courses()->attach($id, ['status' => 'pending']);
+        return redirect()->back();
+    }
+
+    public function annulla($id)
+    {
+        Auth::user()->courses()->detach($id);
+        return redirect()->back();
+    }
+
+    public function index(Request $request)
+    {
+        // $courses = User::with('courses', 'courses.activity', 'courses.slot')->get();
+        // $query = User::where('name', 'like', '%' . $request->query('q', '') . '%')->get();
+        $courses = Course::with('users', 'activity', 'slot')->where('id', 'like', '%' . $request->query('q', '') . '%')->paginate(5);
         // dd($courses);
         return view('courses.index', ['courses' => $courses]);
     }
@@ -63,6 +81,6 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
     }
 }
