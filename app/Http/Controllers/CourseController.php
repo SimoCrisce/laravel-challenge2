@@ -15,6 +15,20 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function accept($id, $user)
+    {
+        User::find($user)->courses()->updateExistingPivot($id, ['status' => 'accepted']);
+        return redirect()->back();
+    }
+
+    public function reject($id, $user)
+    {
+        // User::with('courses')->attach($id, ['status' => 'rejected']);
+        User::find($user)->courses()->updateExistingPivot($id, ['status' => 'rejected']);
+        return redirect()->back();
+    }
+
     public function prenota($id)
     {
         Auth::user()->courses()->attach($id, ['status' => 'pending']);
@@ -31,8 +45,11 @@ class CourseController extends Controller
     {
         // $courses = User::with('courses', 'courses.activity', 'courses.slot')->get();
         // $query = User::where('name', 'like', '%' . $request->query('q', '') . '%')->get();
-        $courses = Course::with('users', 'activity', 'slot')->where('id', 'like', '%' . $request->query('q', '') . '%')->paginate(5);
-        // dd($courses);
+        $courses = Course::with('users', 'activity', 'slot')
+        // ->where('id', 'like', '%' . $request->query('q', '') . '%')
+        ->paginate(5);
+        // $user = Course::all();
+        // dd($user);
         return view('courses.index', ['courses' => $courses]);
     }
 
