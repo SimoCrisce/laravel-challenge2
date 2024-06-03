@@ -13,6 +13,13 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
-        Activity::factory(10)->create();
+        // Activity::factory(10)->create();
+        $activities = ['Mountain Bike', 'Calcio', 'Basket', 'Pallavolo', 'Nuoto', 'Tennis'];
+        foreach($activities as $activity) {
+            Activity::create([
+                'name' => $activity,
+                'description' => fake()->words(rand(15, 20), true),
+            ]);
+        }
     }
 }

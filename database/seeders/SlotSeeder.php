@@ -13,6 +13,13 @@ class SlotSeeder extends Seeder
      */
     public function run(): void
     {
-        Slot::factory(10)->create();
+        $days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        foreach ($days as $day) {
+            Slot::create([
+                'day' => $day,
+                'start' => fake()->time(),
+                'end' => fake()->time(),
+            ]);
+        }
     }
 }

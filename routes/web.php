@@ -34,6 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/courses/annulla/{id}', [CourseController::class, 'annulla'])->name('courses.annulla');
     Route::post('/courses/reject/{id}/{user}', [CourseController::class, 'reject'])->name('courses.reject');
     Route::post('/courses/accept/{id}/{user}', [CourseController::class, 'accept'])->name('courses.accept');
+    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+    Route::post('/courses/store', [CourseController::class, 'store'])->name('courses.store');
+    Route::get('/courses/show/{id}', [CourseController::class, 'show'])->name('courses.show');
+    Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::post('/courses/update/{id}', [CourseController::class, 'edit'])->name('courses.update');
 });
 
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
