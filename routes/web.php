@@ -38,7 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/courses/store', [CourseController::class, 'store'])->name('courses.store');
     Route::get('/courses/show/{id}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('courses.edit');
-    Route::post('/courses/update/{id}', [CourseController::class, 'edit'])->name('courses.update');
+    Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 });
 
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');

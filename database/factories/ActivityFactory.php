@@ -17,7 +17,7 @@ class ActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(['Mountain Bike', 'Calcio', 'Basket', 'Pallavolo', 'Nuoto', 'Tennis']),
+            'name' => ['Mountain Bike', 'Calcio', 'Basket', 'Pallavolo', 'Nuoto', 'Tennis'],
             'description' => fake()->words(rand(15, 20), true),
         ];
     }

@@ -30,12 +30,12 @@ class UserSeeder extends Seeder
         $users = User::all()->all();
         $course_ids = Course::all()->pluck('id')->all();
         
-        foreach ($users as $user) {
-            $courses_for_user = fake()->randomElements($course_ids, rand(1, count($course_ids)));
-            foreach ($courses_for_user as $course_id) {
-                $user->courses()->attach($course_id, ['status' => 'pending']);
-            }
-        }
+        // foreach ($users as $user) {
+        //     $courses_for_user = fake()->randomElements($course_ids, rand(1, count($course_ids)));
+        //     foreach ($courses_for_user as $course_id) {
+        //         $user->courses()->attach($course_id, ['status' => null]);
+        //     }
+        // }
     }
 
 }

@@ -29,18 +29,25 @@
                 <td>{{ $course->slot->end }}</td>
                 @auth
                     <td>
-                        @if ($course->users->contains(Auth::id()))
-                            <form action="{{ route('courses.annulla', ['id' => $course->id]) }}" method="POST">
-                                @csrf
-                                <button class="btn btn-danger">Annulla</button>
-                            </form>
-                        @else
-                            <form action="{{ route('courses.prenota', ['id' => $course->id]) }}" method="POST">
-                                @csrf
-                                <button class="btn btn-success">Prenota</button>
-                            </form>
-                        @endif
-                        <a href="{{ route('courses.edit', ['id' => $course->id]) }}" class="btn btn-success mt-1">Modifica</a>
+                        <div class="d-flex gap-1">
+                            @if (Auth::user()->role === 'user')
+                                @if ($course->users->contains(Auth::id()))
+                                    <form action="{{ route('courses.annulla', ['id' => $course->id]) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-danger">Annulla</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('courses.prenota', ['id' => $course->id]) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-success">Prenota</button>
+                                    </form>
+                                @endif
+                            @endif
+                            @if (Auth::user()->role === 'admin')
+                                <a href="{{ route('courses.edit', ['id' => $course->id]) }}"
+                                    class="btn btn-success">Modifica</a>
+                            @endif
+                        </div>
                     </td>
                 @endauth
         </tbody>

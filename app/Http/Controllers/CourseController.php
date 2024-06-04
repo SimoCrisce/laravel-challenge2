@@ -61,6 +61,7 @@ class CourseController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role !== "admin") abort(401);
         $activities = Activity::all();
         $slots = Slot::all();
         return view('courses.create', 
@@ -73,6 +74,12 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'slot_id' => [],
+        //     'activity_id' => [],
+        //     'location' => ['required'],
+        // ], ['location.required' => 'Non lasciare la location vuota']);
+
         $data = $request->all();
 
         // dd($data);
@@ -100,6 +107,7 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
+        if (Auth::user()->role !== "admin") abort(401);
         $course_id = Course::findOrFail($id);
         $activities = Activity::all();
         $slots = Slot::all();
@@ -111,6 +119,13 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::user()->role !== "admin") abort(401);
+        $request->validate([
+            'slot_id' => [],
+            'activity_id' => [],
+            'location' => ['required'],
+        ], ['location.required' => 'Non lasciare la location vuota']);
+
         $data = $request->all();
         $course = Course::findOrFail($id);
 
@@ -125,8 +140,11 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course)
+    public function destroy($id)
     {
+        $course = Course::findOrFail($id);
+        if (Auth::user()->role !== "admin") abort(401);
         $course->delete();
+        return redirect()->route('courses.index');
     }
 }

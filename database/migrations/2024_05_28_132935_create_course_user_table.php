@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id');
             $table->foreignId('user_id');
-            $table->string('status', 15);
+            $table->string('status', 15)->nullable();
         });
     }
 

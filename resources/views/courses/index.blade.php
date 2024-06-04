@@ -6,7 +6,11 @@
     @guest
         <h3>Fai il login per poterti prenotare!</h3>
     @endguest
-    <a href="{{ route('courses.create') }}" class="btn btn-success">Aggiungi un corso</a>
+    @auth
+        @if (Auth::user()->role === 'admin')
+            <a href="{{ route('courses.create') }}" class="btn btn-success">Aggiungi un corso</a>
+        @endif
+    @endauth
     <table class="table">
         <thead>
             <tr>
@@ -34,20 +38,30 @@
                     <td>{{ $course->slot->end }}</td>
                     @auth
                         <td>
-                            {{-- @if (in_array(Auth::id(), $course->users->pluck('id')->all())) --}}
-                            @if ($course->users->contains(Auth::id()))
-                                <form action="{{ route('courses.annulla', ['id' => $course->id]) }}" method="POST">
-                                    @csrf
-                                    <button class="btn btn-danger">Annulla</button>
-                                </form>
-                            @else
-                                <form action="{{ route('courses.prenota', ['id' => $course->id]) }}" method="POST">
-                                    @csrf
-                                    <button class="btn btn-success">Prenota</button>
-                                </form>
-                            @endif
-                            <a href="{{ route('courses.show', ['id' => $course->id]) }}"
-                                class="btn btn-primary mt-1">Dettagli</a>
+                            <div class="d-flex gap-1">
+                                {{-- @if (in_array(Auth::id(), $course->users->pluck('id')->all())) --}}
+                                @if (Auth::user()->role === 'user')
+                                    @if ($course->users->contains(Auth::id()))
+                                        <form action="{{ route('courses.annulla', ['id' => $course->id]) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-danger">Annulla</button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('courses.prenota', ['id' => $course->id]) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-success">Prenota</button>
+                                        </form>
+                                    @endif
+                                @elseif(Auth::user()->role === 'admin')
+                                    <form action="{{ route('courses.destroy', ['id' => $course->id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger">Elimina</button>
+                                    </form>
+                                @endif
+                                <a href="{{ route('courses.show', ['id' => $course->id]) }}"
+                                    class="btn btn-primary">Dettagli</a>
+                            </div>
                         </td>
                     @endauth
                 </tr>
